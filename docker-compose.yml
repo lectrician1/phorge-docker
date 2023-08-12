@@ -1,0 +1,23 @@
+version: '3'
+services:
+  phorge-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./phorge:/var/www/html
+      - ./apache-config.conf:/etc/apache2/sites-available/000-default.conf
+    depends_on:
+      - phorge-db
+    #entrypoint: ["docker-php-entrypoint", "apache2-foreground"] # Add this line
+
+  phorge-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: phorge
+      MYSQL_USER: phorge_user
+      MYSQL_PASSWORD: phorge_password
+
